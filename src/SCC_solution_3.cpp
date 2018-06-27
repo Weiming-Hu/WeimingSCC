@@ -269,7 +269,9 @@ NumericVector
         << "Generating adjacency list: " << elapsed_prepare << " s("
         << elapsed_list_2/elapsed_total * 100 << "%)" << endl
         << "Computing the leaders: " << elapsed_DFS_leader << " s("
-        << elapsed_DFS_leader/elapsed_total * 100 << "%)" << endl;
+        << elapsed_DFS_leader/elapsed_total * 100 << "%)" << endl
+        << "Total time: " << elapsed_total << " s("
+        << elapsed_total/elapsed_total * 100 << "%)" << endl;
 		}
 
 		NumericVector leaders_R = wrap(scc.leaders);
