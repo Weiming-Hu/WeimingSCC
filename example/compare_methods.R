@@ -18,6 +18,11 @@
 # list to keep track of the child nodes instead of
 # searching for child nodes every time.
 #
+# Solution 4 is the improved implementation of the solution
+# 1. This implementation first generate the adjacency
+# list to keep track of the child nodes instead of
+# searching for child nodes every time.
+#
 
 library(WeimingSCC)
 library(profmem)
@@ -26,7 +31,7 @@ library(profmem)
 profile.memory <- F
 
 # Whether to profile algorithm time
-profile.time <- F
+profile.time <- T
 
 # Whether to print the progress of the algorithm
 verbose <- T
@@ -55,7 +60,7 @@ if (F) {
 	rm(vote)
 }
 
-if (T) {
+if (F) {
 	# Twitter: this graph is the largest one with
 	# 2420744 edges and 81306 nodes.
 	#
@@ -64,6 +69,25 @@ if (T) {
 	data('edge_list_twitter')
 	edge.list <- twitter
 	rm(twitter)
+}
+
+if (F) {
+	# Data from Coursera course - Algorithm by Stanford University with
+	# 5105042 edges and 875714 nodes.
+	data('edge_list_coursera')
+	edge.list <- coursera
+	rm(coursera)
+}
+
+if (T) {
+	# Synthetic data that has a long path. This data set is specifically
+	# created to generate stack overflow problem for Solution_4.
+	#
+	nrows <- 1000000
+	edge.list <- matrix(nrow = nrows, ncol = 2)
+	for (i in 1:nrows) {
+		edge.list[i, ] <- c(i, i+1)
+	}
 }
 
 ####################################################
@@ -162,4 +186,30 @@ if (T) {
 
 	identical(length(unique(ret$membership)),
 						length(unique(leaders_3)))
+}
+
+####################################################
+#                 Use solution 4                   #
+####################################################
+if (T) {
+	print("Running the solution code 4 ...")
+
+	if (profile.memory) {
+		p <- profmem({
+			leaders_4 <- SCC_solution_4(edge.list[, 1],
+																	edge.list[, 2])
+		})
+		print(p, expr = T)
+	}
+
+	if (profile.time) {
+		system.time(leaders_4 <- SCC_solution_4(
+			edge.list[, 1], edge.list[, 2]), verbose)
+	} else {
+		leaders_4 <- SCC_solution_4(edge.list[, 1], edge.list[, 2],
+																verbose)
+	}
+
+	identical(length(unique(ret$membership)),
+						length(unique(leaders_4)))
 }
